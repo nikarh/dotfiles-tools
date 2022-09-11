@@ -24,6 +24,7 @@ int main(void) {
     return 1;
   }
 
+  printf("Starting dbus listener\n");
   while (true) {
     dbus_connection_read_write(conn, 0);
     DBusMessage *msg = dbus_connection_pop_message(conn);
@@ -32,6 +33,7 @@ int main(void) {
       continue;
     }
 
+    printf("New message!\n");
     if (dbus_message_is_method_call(msg, "org.powertools", "RestartNvidia")) {
       printf("Restarting nvidia module\n");
       system("rmmod nvidia_uvm");

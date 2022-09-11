@@ -12,8 +12,13 @@ My current solution to this problem consists of the following:
 - A shell script which monitors resume signal, stops sunshine, docker containers which require a GPU, calls a dbus method consumed by nvidia-uvm-reload, waits for it to complete and restarts sunshine and docker containers
 - A dbus system call handler (nvidia-uvm-reload), which restarts nvidia_uvm kernel module
 
-### Why two codebases?
-Everything is better in Rust. But C version has no external dependencies, instantly compiles, and the resulting binary is 10x smaller.
+### Why so complicated?
+
+I could have slammed all this logic in a single shell script. But it would be either:
+- Running as systemd serice hooked to suspend, and it would have to run stuff as a user.
+- Running this script as user, and sudo'ing rmmod and modprobe.
+
+It's a better idea to run priveleged stuff via daemon and RPC call it when needed (using d bus since why not), and run user stuff as user.
 
 ## udev-monitor
 

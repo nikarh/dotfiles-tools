@@ -10,7 +10,11 @@ depends=(dbus)
 makedepends=(gcc)
 source=("main.c" "Makefile" "nvidia-uvm-reload.conf" "nvidia-uvm-reload.service" "org.powertools.service")
 
+<<<<<<< HEAD
 sha256sums=('d96e8cd4826d919c520684801942c14e1a950218a070466557c6797df38d0d0f'
+=======
+sha256sums=('e890dc14a2367710bd84e6c45b8e8fe537bcefdbdb8735c6fc17a1ab9ecf4a1b'
+>>>>>>> d5cfef0 (Added tools)
             'c15e9a151921bebdbbf2743da10b2837b313e55e1d2223b5287376dfede45b1c'
             'fbf05bdd5095fe2167a7e2664836f62266f9d5e0b44136c95c7b8cf7e10797ba'
             '84b3e43a7c8d0c28c7a710837607299074279be40f57319e7a8a1d16791df714'
