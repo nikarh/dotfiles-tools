@@ -1,0 +1,36 @@
+# Maintainer: Nikolay Arhipovs <nikolajs.arhipovs@gmail.com>
+pkgname=nvidia-uvm-reload
+pkgver=0.0.1
+pkgrel=2
+pkgdesc="A dbus call handler which reloads nvidia_uvm module to fix CUDA after suspend"
+arch=('i686' 'x86_64')
+url="https://github.com/nikarh/dotfiles-tools/"
+license=('MIT')
+depends=(dbus)
+makedepends=(gcc)
+source=("main.c" "Makefile" "nvidia-uvm-reload.conf" "nvidia-uvm-reload.service" "org.powertools.service")
+
+sha256sums=('d96e8cd4826d919c520684801942c14e1a950218a070466557c6797df38d0d0f'
+            'c15e9a151921bebdbbf2743da10b2837b313e55e1d2223b5287376dfede45b1c'
+            'fbf05bdd5095fe2167a7e2664836f62266f9d5e0b44136c95c7b8cf7e10797ba'
+            '84b3e43a7c8d0c28c7a710837607299074279be40f57319e7a8a1d16791df714'
+            'f6643d3c8cc57f79b26fd11fe4b9ca2d9a2a19356e985fd8ef63c22803780146')
+
+build() {
+  make
+}
+
+package() {
+  install -Dm644 $srcdir/nvidia-uvm-reload.conf -t "$pkgdir/usr/share/dbus-1/system.d/"
+  install -Dm644 $srcdir/org.powertools.service -t "$pkgdir/usr/share/dbus-1/system-services/"
+  install -Dm644 $srcdir/nvidia-uvm-reload.service -t "$pkgdir/usr/lib/systemd/system/"
+  install -Dm755 $srcdir/target/nvidia-uvm-reload -t "$pkgdir/usr/bin/"
+}
+
+post_install() {
+  systemctl reload dbus
+}
+
+post_upgrade() {
+  systemctl reload dbus
+}
