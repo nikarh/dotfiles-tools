@@ -36,14 +36,34 @@ int main(void) {
     printf("New message!\n");
     if (dbus_message_is_method_call(msg, "org.powertools", "RestartNvidia")) {
       printf("Restarting nvidia module\n");
-      system("rmmod nvidia_uvm");
-      system("modprobe nvidia_uvm");
+      int res = system("rmmod nvidia_uvm");
+      res |= system("modprobe nvidia_uvm");
       printf("Returning\n");
+
       DBusMessage *reply = dbus_message_new_method_return(msg);
       if (!dbus_connection_send(conn, reply, NULL)) {
         fprintf(stderr, "Unable to reply\n");
         return 1;
       }
+
+      printf("Exit status is %i\n", res);
+      if (res == 0) {
+        DBusMessage *msg2 =
+            dbus_message_new_signal("/", "org.powertools", "NvidiaRestarted");
+        if (NULL == msg2) {
+          fprintf(stderr, "NvidiaRestarted message is null\n");
+          return 1;
+        }
+
+        // send the message and flush the connection
+        if (!dbus_connection_send(conn, msg2, NULL)) {
+          fprintf(stderr, "Unable to reply with a signal\n");
+          return 1;
+        }
+
+        dbus_message_unref(msg2);
+      }
+
       dbus_connection_flush(conn);
       dbus_message_unref(reply);
     }
