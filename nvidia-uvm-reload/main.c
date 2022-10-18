@@ -26,7 +26,7 @@ int main(void) {
 
   printf("Starting dbus listener\n");
   while (true) {
-    dbus_connection_read_write(conn, 0);
+    dbus_connection_read_write(conn, -1);
     DBusMessage *msg = dbus_connection_pop_message(conn);
 
     if (NULL == msg) {
