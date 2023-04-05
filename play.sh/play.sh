@@ -35,6 +35,11 @@ if [[ "$1" == "--as-user" ]]; then
     exit $STATUS
 fi
 
+# Another hack when running with sudo for another user
+if [[ -z "$DBUS_SESSION_BUS_ADDRESS" ]]; then
+    export DBUS_SESSION_BUS_ADDRESS="unix:path=/run/user/$UID/bus"
+fi
+
 if [[ -n "$DEBUG" ]]; then
     set -x
     export WINEDEBUG=warn+all

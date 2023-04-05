@@ -1,6 +1,6 @@
 # Maintainer: Nikolay Arhipovs <n@arhipov.net>
 pkgname=play.sh
-pkgver=0.0.2
+pkgver=0.0.3
 pkgrel=1
 pkgdesc="A tool similar to lutris and proton without a GUI which runs games from a YAML manifest"
 arch=('i686' 'x86_64')
@@ -8,7 +8,7 @@ url="https://github.com/nikarh/dotfiles-tools/"
 license=('MIT')
 depends=(go-yq)
 source=("play.sh" "play.sh.service")
-sha256sums=('00c67e24cfaa5d63984e1eeff1bbd10c3ca71a808566876ea085ee40b04956ef'
+sha256sums=('cfc0e882523063bc990fa3f1fccb4053de52e6cc249ca67466fae4c2384a53bb'
             '3746db3ee2c77588e9cbebf91a53de69834cb548ee19c1ae363547dd66dc32c2')
 
 package() {
