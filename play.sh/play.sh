@@ -377,10 +377,10 @@ function run-wine {
     fi
 
     # Enable CUDA for DLSS 3.0 or PhysX. This is taken from wine
-    if [ -f "$LIBRARIES/nvcuda/nvcuda64.dll" ]; then
+    if [ -f "/usr/lib/wine/x86_64-windows/nvcuda.dll" ]; then
         echo Copying nvcuda
-        cp "$LIBRARIES/nvcuda/nvcuda64.dll" "$WINEPREFIX/drive_c/windows/system32/nvcuda.dll"
-        cp "$LIBRARIES/nvcuda/nvcuda32.dll" "$WINEPREFIX/drive_c/windows/syswow64/nvcuda.dll"
+        cp "/usr/lib/wine/x86_64-windows/nvcuda.dll" "$WINEPREFIX/drive_c/windows/system32/nvcuda.dll"
+        cp "/usr/lib32/wine/i386-windows/nvcuda.dll" "$WINEPREFIX/drive_c/windows/syswow64/nvcuda.dll"
     fi
 
     # Before scripts
