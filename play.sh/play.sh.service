@@ -1,0 +1,8 @@
+[Unit]
+Description=Watch play.sh config and generate files
+
+[Service]
+ExecStart=/usr/bin/play.sh watch
+
+[Install]
+WantedBy=default.target

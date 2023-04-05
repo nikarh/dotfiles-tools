@@ -1,0 +1,17 @@
+# Maintainer: Nikolay Arhipovs <n@arhipov.net>
+pkgname=play.sh
+pkgver=0.0.1
+pkgrel=1
+pkgdesc="A tool similar to lutris and proton without a GUI which runs games from a YAML manifest"
+arch=('i686' 'x86_64')
+url="https://github.com/nikarh/dotfiles-tools/"
+license=('MIT')
+depends=(go-yq)
+source=("play.sh" "play.sh.service")
+sha256sums=('44a7ffef89f79a2429b8e48461a828791a4289601dbd56d2c50b7f407a5d8abe'
+            '3746db3ee2c77588e9cbebf91a53de69834cb548ee19c1ae363547dd66dc32c2')
+
+package() {
+  install -Dm755 $srcdir/play.sh -t "$pkgdir/usr/bin/"
+  install -Dm644 $srcdir/play.sh.service -t "$pkgdir/usr/lib/systemd/user/"
+}

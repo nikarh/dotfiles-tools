@@ -15,7 +15,7 @@ My current solution to this problem consists of the following:
 
 - A systemd daemon that sends a dbus signal before suspend and after resume
 - A shell script which monitors resume signal, stops sunshine, docker containers which require a GPU, calls a dbus method consumed by nvidia-uvm-reload, waits for it to complete and restarts sunshine and docker containers
-- A dbus system call handler (nvidia-uvm-reload), which restarts nvidia_uvm kernel module
+- A dbus system call handler (nvidia-uvm-reload), which restarts the nvidia_uvm kernel module
 
 ### Why so complicated?
 
@@ -31,3 +31,24 @@ It's a better idea to run privileged stuff via daemon and RPC call it when neede
 ## udev-monitor
 
 When a new USB keyboard is connected, xorg resets the repeat rate. Because it's a new keyboard. I want my keyboard settings to be always applied, even to new hardware. To do so a user process subscribes to udev USB events and on any change re-executes input device configuration.
+
+## play.sh
+
+A magical shell script I use to launch games and windows app via wine. This script uses a yaml manifest describing how to launch games.
+For windows games apps it also
+ 1. Downloads/ensures that a specific wine-ge runtime exists
+ 2. Ensures wine prefix exists
+ 3. Unlinks symlinks to $HOME
+ 4. Downloads and installs the following libraries to a prefix:
+    - dxvk (or dxvk-async)
+    - dxvk-nvapi
+    - vkd3d-proton
+    - Copies nvngx.dll from nvidia driver
+    - Copies pre-built nvcuda.dll
+
+Also for each game, this script can generate
+ - A `.desktop` file
+ - An entry in sunshine for remote play
+ - A shell script for launching
+
+For `.desktop` files and sunshine entries, it also downloads a banner or icon from steamgriddb.
