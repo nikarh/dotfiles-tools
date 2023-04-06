@@ -2,6 +2,22 @@
 
 This repository contains various tools written in compiled languages which are used in my dotfiles for both system and user setup.
 
+## micro-locker
+
+This tool subscribes systemd DBUS signals and runs arbitrary commands on the following events:
+- Lock (indicates that a locker must be started)
+- Unlock (indicates that a session is unlocked and the locker can be killed)
+- Suspend
+- Resume
+
+The commands are set via env variables like this:
+
+```
+ON_LOCK="i3lock \
+ON_SUSPEND="i3lock" \
+ON_UNLOCK="killall i3lock" \
+    micro-locker 
+```
 
 ## nvidia-uvm-reload
 
@@ -13,8 +29,8 @@ It seems that [Nvidia systemd sleep hook](http://download.nvidia.com/XFree86/Lin
 Nvidia CUDA doesn't survive system suspends. This leaves things such as [Sunshine](https://github.com/LizardByte/Sunshine) or [Stable Diffusion](https://github.com/AbdBarho/stable-diffusion-webui-docker) broken after resuming.
 My current solution to this problem consists of the following:
 
-- A systemd daemon that sends a dbus signal before suspend and after resume
-- A shell script which monitors resume signal, stops sunshine, docker containers which require a GPU, calls a dbus method consumed by nvidia-uvm-reload, waits for it to complete and restarts sunshine and docker containers
+- A systemd daemon that sends a dbus signal before suspension and after resume
+- A shell script that monitors resume signals, stops sunshine, and docker containers that require a GPU, calls a dbus method consumed by nvidia-uvm-reload, waits for it to complete and restarts sunshine and docker containers
 - A dbus system call handler (nvidia-uvm-reload), which restarts the nvidia_uvm kernel module
 
 ### Why so complicated?
