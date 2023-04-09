@@ -29,7 +29,7 @@ int main(int argc, char **argv) {
     return 1;
   }
   if (command == NULL) {
-    printf("You must provide a comand to execute with -e argument!\n");
+    printf("You must provide a command to execute with -e argument!\n");
     return 1;
   }
 
