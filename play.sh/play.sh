@@ -373,7 +373,7 @@ function run-wine {
 
             # FIXME: Ugly hack for dxvk-async 2.1
             local command=install
-            if [[ "$line/$version" == "dxvk-async/fork-2.1" ]]; then
+            if echo "$line/$version" | grep -q "^dxvk-async/fork"; then
                 command=""
             fi
 
