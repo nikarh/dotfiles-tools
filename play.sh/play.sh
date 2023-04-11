@@ -1,5 +1,12 @@
 #!/usr/bin/bash -e
 
+if [[ -n "$DEBUG" ]]; then
+    set -x
+    export WINEDEBUG=warn+all
+else 
+    export WINEDEBUG=-all
+fi
+
 # This is a dirty hack for now
 # The main reason why this exists is that I want to load a pw TCP socket module
 # only for a duration of the app, so we can't just run this script as a different user,
@@ -40,13 +47,6 @@ if [[ -z "$DBUS_SESSION_BUS_ADDRESS" ]]; then
     export DBUS_SESSION_BUS_ADDRESS="unix:path=/run/user/$UID/bus"
 fi
 
-if [[ -n "$DEBUG" ]]; then
-    set -x
-    export WINEDEBUG=warn+all
-else 
-    export WINEDEBUG=-all
-fi
-
 cd "$(dirname "$(readlink -f "$0")")" || exit
 
 function expand {
@@ -55,10 +55,13 @@ function expand {
 
 YQ="yq"
 
-DATA_HOME="${XDG_DATA_HOME:-"$HOME/.local/share"}"
-CONFIG_DIR="${XDG_CONFIG_HOME:-"$HOME/.config"}/play.sh"
-CACHE_DIR="${XDG_CACHE_HOME:-"$HOME/.cache"}/play.sh"
-DATA_DIR="$DATA_HOME/play.sh"
+XDG_DATA_HOME="${XDG_DATA_HOME:-"$HOME/.local/share"}"
+XDG_CONFIG_HOME="${XDG_CONFIG_HOME:-"$HOME/.config"}"
+XDG_CACHE_HOME="${XDG_CACHE_HOME:-"$HOME/.cache"}"
+
+CONFIG_DIR="$XDG_CONFIG_HOME/play.sh"
+CACHE_DIR="$XDG_CACHE_HOME/play.sh"
+DATA_DIR="$XDG_DATA_HOME/play.sh"
 
 YAML=${CONFIG:-"$CONFIG_DIR/games.yaml"}
 
@@ -72,9 +75,9 @@ RUNTIMES="$(cat "$YAML" | "$YQ" '.paths.runtimes // "'$DATA_DIR/runtimes'"' | ex
 LIBRARIES="$(cat "$YAML" | "$YQ" '.paths.libraries // "'$DATA_DIR/libraries'"' | expand)"
 CACHE="$(cat "$YAML" | "$YQ" '.paths.cache // "'$CACHE_DIR'"' | expand)"
 
-SHELLS_DIR="$(cat "$YAML" | "$YQ" '.paths.shells // "'$DATA_HOME/bin'"' | expand)"
-DESKTOP_DIR="$(cat "$YAML" | "$YQ" '.paths.desktop // "'$DATA_HOME/applications/play.sh'"' | expand)"
-SUNSHINE_CONF="$(cat "$YAML" | "$YQ" '.paths.sunshine // "'$CONFIG_DIR/sunshine/DESKTOP_DIR_linux.json'"' | expand)"
+SHELLS_DIR="$(cat "$YAML" | "$YQ" '.paths.shells // "'$XDG_DATA_HOME/bin'"' | expand)"
+DESKTOP_DIR="$(cat "$YAML" | "$YQ" '.paths.desktop // "'$XDG_DATA_HOME/applications/play.sh'"' | expand)"
+SUNSHINE_CONF="$(cat "$YAML" | "$YQ" '.paths.sunshine // "'$XDG_CONFIG_HOME/sunshine/apps_linux.json'"' | expand)"
 
 LAUNCHER="$(cat "$YAML" | "$YQ" ".launcher // \"$0 {}\"" | expand)"
 WRAPPER="$(cat "$YAML" | "$YQ" '.wrapper // ""')"
@@ -166,6 +169,11 @@ function prepare-library {
         return
     fi
 
+    # Already installed
+    if [ -d "$LIBRARIES/$1/$version" ]; then
+        return;
+    fi
+
     if [ -z "$source" ]; then
         install-release "$2" "$version" "$3" "$LIBRARIES/$1"
     else
@@ -182,7 +190,6 @@ function prepare-library {
 
 function prepare-libaries {
     mkdir -p "$LIBRARIES"
-    mkdir -p "$LIBRARIES/dxvk-nvapi"
 
     prepare-library dxvk         doitsujin/dxvk                 ".*\.tar\.gz$" "https://aur.archlinux.org/cgit/aur.git/plain/setup_dxvk.sh?h=dxvk-bin"
     prepare-library dxvk-async   Sporif/dxvk-async              ".*\.tar\.gz$"
