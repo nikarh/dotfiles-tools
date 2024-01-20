@@ -1,8 +1,0 @@
-[Unit]
-Description=Restart nvidia_uvm on dbus method call
-
-[Service]
-ExecStart=/usr/bin/nvidia-uvm-reload
-
-[Install]
-WantedBy=multi-user.target

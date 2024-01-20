@@ -1,5 +1,0 @@
-[D-BUS Service]
-Name=org.powertools
-Exec=/bin/false
-User=root
-SystemdService=nvidia-uvm-reload.service

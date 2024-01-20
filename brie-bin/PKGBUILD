@@ -1,12 +1,12 @@
 # Maintainer: Nikolay Arhipov <n@arhipov.net>
 pkgbase=brie-bin
 pkgname=brie-bin
-pkgver=0.0.3
+pkgver=0.0.10
 pkgrel=1
 pkgdesc="A CLI toolset for running executables with Wine in isolated prefixes"
 arch=('x86_64')
 url="https://github.com/nikarh/brie"
-license=('MIT or Apache-2.0')
+license=('MIT')
 makedepends=('git' 'curl' 'grep' 'awk')
 provides=("${pkgname%-bin}")
 conflicts=("${pkgname%-bin}")
