@@ -19,9 +19,21 @@ ON_UNLOCK="killall i3lock" \
     micro-locker 
 ```
 
-## udev-monitor
+## xorg-on-input-hierarchy-change
 
-When a new USB keyboard is connected, xorg resets the repeat rate. Because it's a new keyboard. I want my keyboard settings to be always applied, even to new hardware. To do so a user process subscribes to udev USB events and on any change re-executes input device configuration.
+Listens to X Input Extension hierarchy change events. When input devices are added or removed in Xorg, this tool executes an arbitrary command. This is useful because Xorg resets keyboard settings (like repeat rate) when a new keyboard is connected. Events are debounced to handle rapid device changes (e.g., when plugging in a keyboard that registers multiple devices).
+
+Usage:
+
+```
+xorg-on-input-hierarchy-change <command> [args...]
+```
+
+Example:
+
+```
+xorg-on-input-hierarchy-change /path/to/init-input-devices.sh
+```
 
 ## brie-bin
 
